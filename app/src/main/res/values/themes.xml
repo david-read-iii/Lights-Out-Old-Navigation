@@ -1,12 +1,38 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <!-- Base application theme. -->
-    <style name="Theme.LightsOut" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/blue_500</item>
-        <item name="colorPrimaryVariant">@color/blue_700</item>
+    <!-- Default theme with no action bar. -->
+    <style name="Theme.NoActionBar" parent="Theme.MaterialComponents.NoActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue_grey_800</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <!-- Window background color. -->
+        <item name="android:colorBackground">@color/blue_grey_800_light</item>
+        <item name="colorOnBackground">@color/white</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+    </style>
+
+    <!-- Default theme with action bar. -->
+    <style name="Theme.ActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue_grey_800</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Window background color. -->
+        <item name="android:colorBackground">@color/blue_grey_800_light</item>
+        <item name="colorOnBackground">@color/white</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+        <!-- Toolbar style. -->
         <item name="toolbarStyle">@style/ToolbarStyle</item>
+
     </style>
 
     <!-- Toolbar style. -->
