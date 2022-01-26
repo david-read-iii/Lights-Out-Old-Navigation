@@ -20,11 +20,15 @@
         </activity>
 
         <activity
-            android:name=".ColorActivity"
+            android:name=".HelpActivity"
+            android:label="@string/help_activity_toolbar_label"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.ActionBar" />
 
         <activity
-            android:name=".HelpActivity"
+            android:name=".ColorActivity"
+            android:label="@string/color_activity_toolbar_label"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.ActionBar" />
 
     </application>
