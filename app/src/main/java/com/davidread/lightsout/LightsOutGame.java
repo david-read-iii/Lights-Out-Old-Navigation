@@ -20,10 +20,16 @@ public class LightsOutGame {
     private final boolean[][] lightsGrid;
 
     /**
+     * Int to keep track of the number of cheat clicks.
+     */
+    private int countCheatClicks;
+
+    /**
      * Constructs a new {@link LightsOutGame}.
      */
     public LightsOutGame() {
         lightsGrid = new boolean[GRID_SIZE][GRID_SIZE];
+        countCheatClicks = 0;
     }
 
     /**
@@ -36,6 +42,7 @@ public class LightsOutGame {
                 lightsGrid[row][col] = randomNumGenerator.nextBoolean();
             }
         }
+        countCheatClicks = 0;
     }
 
     /**
@@ -82,5 +89,57 @@ public class LightsOutGame {
             }
         }
         return true;
+    }
+
+    /**
+     * Increments {@link #countCheatClicks}. Then, checks if the count is 5 or greater. If so,
+     * it puts the game in a terminal state.
+     */
+    public void incrementCheatCount() {
+        countCheatClicks++;
+        if (countCheatClicks >= 5) {
+            for (int row = 0; row < GRID_SIZE; row++) {
+                for (int col = 0; col < GRID_SIZE; col++) {
+                    lightsGrid[row][col] = false;
+                }
+            }
+        }
+    }
+
+    /**
+     * Resets {@link #countCheatClicks}.
+     */
+    public void resetCheatCount() {
+        countCheatClicks = 0;
+    }
+
+    /**
+     * Returns the state of {@link #lightsGrid} as a {@link String}.
+     */
+    public String getState() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                char value = lightsGrid[row][col] ? 'T' : 'F';
+                stringBuilder.append(value);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Sets the state of {@link #lightsGrid} given a {@link String} generated using
+     * {@link #getState()}.
+     *
+     * @param gameState A {@link String} generated using {@link #getState()}.
+     */
+    public void setState(String gameState) {
+        int index = 0;
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                lightsGrid[row][col] = gameState.charAt(index) == 'T';
+                index++;
+            }
+        }
     }
 }

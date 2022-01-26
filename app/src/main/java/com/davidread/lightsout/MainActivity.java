@@ -1,8 +1,15 @@
 package com.davidread.lightsout;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +25,25 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String GAME_STATE_EXTRA = "game_state";
+
+    private final ActivityResultLauncher<Intent> colorResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            lightOnColorId = data.getIntExtra(ColorActivity.COLOR_EXTRA, R.color.yellow);
+                            lightOnColor = ContextCompat.getColor(MainActivity.this, lightOnColorId);
+                            setButtonColors();
+                        }
+                    }
+                }
+            }
+    );
+
     /**
      * {@link LightsOutGame} representing the logic of the current lights out game.
      */
@@ -27,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
      * {@link GridLayout} used for displaying the board of the lights out game.
      */
     private GridLayout lightGrid;
+
+    private int lightOnColorId;
 
     /**
      * Int representation of the color used for a lit cell.
@@ -48,12 +76,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lightGrid = findViewById(R.id.light_grid);
-
         lightOnColor = ContextCompat.getColor(this, R.color.yellow);
         lightOffColor = ContextCompat.getColor(this, R.color.black);
-
         game = new LightsOutGame();
+        lightOnColorId = R.color.yellow;
+
         startGame();
+    }
+
+    /**
+     * Callback method invoked directly before a configuration change occurs. It saves the state of
+     * {@link #game}.
+     *
+     * @param outState {@link Bundle} for preserving state.
+     */
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(GAME_STATE_EXTRA, game.getState());
+    }
+
+    /**
+     * Callback method invoked after a configuration change. It restores the state of {@link #game}.
+     *
+     * @param savedInstanceState {@link Bundle} holding state from before the configuration changed.
+     */
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        game.setState(savedInstanceState.getString(GAME_STATE_EXTRA));
+        setButtonColors();
     }
 
     /**
@@ -79,7 +131,17 @@ public class MainActivity extends AppCompatActivity {
         int row = buttonIndex / LightsOutGame.GRID_SIZE;
         int col = buttonIndex % LightsOutGame.GRID_SIZE;
 
+        // Select light in game.
         game.selectLight(row, col);
+
+        // Either register cheat click or reset cheat click.
+        if (row == 0 && col == 0) {
+            game.incrementCheatCount();
+        } else {
+            game.resetCheatCount();
+        }
+
+        // Update game UI.
         setButtonColors();
 
         // Congratulate the user if the game.
@@ -117,5 +179,16 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onNewGameClick(View view) {
         startGame();
+    }
+
+    public void onHelpClick(View view) {
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
+    }
+
+    public void onChangeColorClick(View view) {
+        Intent intent = new Intent(this, ColorActivity.class);
+        intent.putExtra(ColorActivity.COLOR_EXTRA, lightOnColorId);
+        colorResultLauncher.launch(intent);
     }
 }
