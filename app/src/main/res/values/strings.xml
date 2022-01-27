@@ -15,5 +15,9 @@
 
     <!-- ColorActivity strings. -->
     <string name="color_activity_toolbar_label">Choose a color</string>
+    <string name="red_button_label">Red</string>
+    <string name="orange_button_label">Orange</string>
+    <string name="yellow_button_label">Yellow</string>
+    <string name="green_button_label">Green</string>
 
 </resources>
