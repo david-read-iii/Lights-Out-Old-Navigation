@@ -6,6 +6,7 @@
     android:padding="@dimen/activity_padding"
     tools:context=".HelpActivity">
 
+    <!-- Instructions TextView. -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

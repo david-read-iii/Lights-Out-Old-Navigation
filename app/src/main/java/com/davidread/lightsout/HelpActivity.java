@@ -7,8 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * {@link HelpActivity} represents a user interface with instructions that tell the user how to play
+ * the Lights Out game.
+ */
 public class HelpActivity extends AppCompatActivity {
 
+    /**
+     * Callback method invoked when the activity is created. It simply inflates the layout of the
+     * activity.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
