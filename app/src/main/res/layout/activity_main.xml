@@ -54,6 +54,15 @@
 
     </GridLayout>
 
+    <TextView
+        android:id="@+id/count_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="20sp"
+        tools:text="Count: 0" />
+
     <Button
         android:id="@+id/new_game_button"
         style="@style/GameOptionButton"

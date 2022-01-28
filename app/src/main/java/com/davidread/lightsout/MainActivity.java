@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,8 +26,16 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * {@link String} constant for identifying the game state passed in a {@link Bundle} during
+     * configuration changes.
+     */
     private static final String GAME_STATE_EXTRA = "game_state";
 
+    /**
+     * {@link ActivityResultLauncher} for setting {@link #lightOnColorId} and {@link #lightOnColor}
+     * in response to {@link ColorActivity} finishes.
+     */
     private final ActivityResultLauncher<Intent> colorResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -54,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private GridLayout lightGrid;
 
+    /**
+     * {@link TextView} used for displaying the count of clicks made in the game so far.
+     */
+    private TextView countTextView;
+
+    /**
+     * Int color ID used for a lit cell.
+     */
     private int lightOnColorId;
 
     /**
@@ -68,20 +85,26 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Callback method invoked when the activity is initially created. It simply initializes the
-     * member variables of this class and makes an initial call to {@link #startGame()}.
+     * member variables of this class and makes an initial call to {@link #startGame()} and
+     * {@link #setCountTextView()}.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize member variables.
+        game = new LightsOutGame();
         lightGrid = findViewById(R.id.light_grid);
+        countTextView = findViewById(R.id.count_text_view);
+        lightOnColorId = R.color.yellow;
         lightOnColor = ContextCompat.getColor(this, R.color.yellow);
         lightOffColor = ContextCompat.getColor(this, R.color.black);
-        game = new LightsOutGame();
-        lightOnColorId = R.color.yellow;
 
+        // Start the game and update the count TextView.
         startGame();
+        setButtonColors();
+        setCountTextView();
     }
 
     /**
@@ -106,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         game.setState(savedInstanceState.getString(GAME_STATE_EXTRA));
         setButtonColors();
+        setCountTextView();
     }
 
     /**
@@ -114,40 +138,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void startGame() {
         game.newGame();
-        setButtonColors();
-    }
-
-    /**
-     * Method invoked when a light button is clicked. It registers the click with {@link #game} and
-     * updates {@link #lightGrid} to match it. Then, it pops a {@link Snackbar} if the game is in
-     * a terminal state.
-     *
-     * @param view {@link View} clicked that invoked this method.
-     */
-    public void onLightButtonClick(View view) {
-
-        // Find the button's row and col.
-        int buttonIndex = lightGrid.indexOfChild(view);
-        int row = buttonIndex / LightsOutGame.GRID_SIZE;
-        int col = buttonIndex % LightsOutGame.GRID_SIZE;
-
-        // Select light in game.
-        game.selectLight(row, col);
-
-        // Either register cheat click or reset cheat click.
-        if (row == 0 && col == 0) {
-            game.incrementCheatCount();
-        } else {
-            game.resetCheatCount();
-        }
-
-        // Update game UI.
-        setButtonColors();
-
-        // Congratulate the user if the game.
-        if (game.isGameOver()) {
-            Snackbar.make(view, R.string.game_win_message, BaseTransientBottomBar.LENGTH_SHORT).show();
-        }
     }
 
     /**
@@ -173,12 +163,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Updates {@link #countTextView} with the latest count from {@link #game}.
+     */
+    public void setCountTextView() {
+        countTextView.setText(getString(R.string.count_label, game.getCountClicks()));
+    }
+
+    /**
+     * Method invoked when a light button is clicked. It registers the click with {@link #game} and
+     * updates {@link #lightGrid} to match it. Then, it pops a {@link Snackbar} if the game is in
+     * a terminal state.
+     *
+     * @param view {@link View} clicked that invoked this method.
+     */
+    public void onLightButtonClick(View view) {
+
+        // Find the button's row and col.
+        int buttonIndex = lightGrid.indexOfChild(view);
+        int row = buttonIndex / LightsOutGame.GRID_SIZE;
+        int col = buttonIndex % LightsOutGame.GRID_SIZE;
+
+        // Select light in game.
+        game.selectLight(row, col);
+
+        // Update game UI.
+        setButtonColors();
+        setCountTextView();
+
+        // Congratulate the user and start a new game if the game is over.
+        if (game.isGameOver()) {
+            Snackbar.make(view, getString(R.string.game_win_message, game.getCountClicks()), BaseTransientBottomBar.LENGTH_SHORT).show();
+            startGame();
+            setButtonColors();
+            setCountTextView();
+        }
+    }
+
+    /**
      * Method invoked when the new game button is clicked. It just calls {@link #startGame()}.
      *
      * @param view {@link View} clicked that invoked this method.
      */
     public void onNewGameClick(View view) {
         startGame();
+        setButtonColors();
+        setCountTextView();
     }
 
     public void onHelpClick(View view) {
