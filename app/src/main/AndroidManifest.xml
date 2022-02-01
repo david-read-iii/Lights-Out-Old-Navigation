@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.davidread.lightsout">
+    package="com.davidread.lightsoutoldnavigation">
 
     <application
         android:allowBackup="true"
@@ -10,8 +10,9 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.davidread.lightsoutoldnavigation.MainActivity"
             android:exported="true"
+            android:label="@string/app_name_short"
             android:theme="@style/Theme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,15 +21,15 @@
         </activity>
 
         <activity
-            android:name=".HelpActivity"
+            android:name="com.davidread.lightsoutoldnavigation.HelpActivity"
             android:label="@string/help_activity_toolbar_label"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.davidread.lightsoutoldnavigation.MainActivity"
             android:theme="@style/Theme.ActionBar" />
 
         <activity
-            android:name=".ColorActivity"
+            android:name="com.davidread.lightsoutoldnavigation.ColorActivity"
             android:label="@string/color_activity_toolbar_label"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.davidread.lightsoutoldnavigation.MainActivity"
             android:theme="@style/Theme.ActionBar" />
 
     </application>

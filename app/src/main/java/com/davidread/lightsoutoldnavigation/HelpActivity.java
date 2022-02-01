@@ -1,4 +1,4 @@
-package com.davidread.lightsout;
+package com.davidread.lightsoutoldnavigation;
 
 import android.os.Bundle;
 import android.view.MenuItem;

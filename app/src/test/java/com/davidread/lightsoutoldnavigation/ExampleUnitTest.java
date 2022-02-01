@@ -1,4 +1,4 @@
-package com.davidread.lightsout;
+package com.davidread.lightsoutoldnavigation;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.davidread.lightsout;
+package com.davidread.lightsoutoldnavigation;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;

@@ -1,7 +1,8 @@
 <resources>
 
     <!-- App name. -->
-    <string name="app_name">Lights Out</string>
+    <string name="app_name">Lights Out (Old Navigation)</string>
+    <string name="app_name_short">Lights Out</string>
 
     <!-- MainActivity strings. -->
     <string name="count_label">Count: %1$d</string>
