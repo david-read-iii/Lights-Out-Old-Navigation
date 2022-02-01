@@ -1,7 +1,7 @@
 # Installation
 1. Clone this repository by entering this command into *Bash*:
 ```bash
-git clone git@github.com:david-read-iii/Lights-Out.git
+git clone git@github.com:david-read-iii/Lights-Out-Old-Navigation.git
 ```
 2. Then, open the root project directory in *Android Studio*.
 
